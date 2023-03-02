@@ -1,21 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useForm } from 'react-hook-form';
 import Input from '../Components/UI/Input';
+import toast from 'react-hot-toast';
 
 const SignUp = () => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log('data', data);
+  const onSubmit = async (data) => {
+    setLoading(true);
+    await createUserWithEmailAndPassword(auth, data?.email, data?.password)
+      .then((userCredential) => {
+        toast.success('Signup successful', { duration: 3000 });
+        const user = userCredential.user;
+        reset();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        toast.error(`Signup failed !! ${errorMessage}`, { duration: 3000 });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
-    <div className='flex justify-center items-center pt-10'>
+    <div className='flex flex-col justify-center items-center pt-10'>
+      <div>
+        <h2 className='text-2xl font-bold mb-10'>SIGN UP</h2>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-y-4'>
         <Input
           label={'Email'}
@@ -38,8 +62,9 @@ const SignUp = () => {
         <button
           type='submit'
           className='py-[10px] px-[18px] rounded-lg disabled:cursor-not-allowed bg-lime-400'
+          disabled={loading}
         >
-          SignUp
+          {!loading ? 'SignUp' : 'Signing up...'}
         </button>
       </form>
     </div>
