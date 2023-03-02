@@ -1,11 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
+import SignUp from './Pages/SignUp';
+import Home from './Pages/Home';
 
 function App() {
   return (
-    <div>
-      <h1 className='text-red-500'>SOCIAL MEDIA APP</h1>
-    </div>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Home />} path='/' />
+          <Route element={<SignUp />} path='/signup' />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
