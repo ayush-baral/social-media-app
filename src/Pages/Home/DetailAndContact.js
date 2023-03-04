@@ -15,7 +15,11 @@ const DetailAndContact = () => {
   return (
     <div className='col-span-3 flex flex-col gap-y-8'>
       <div className='bg-white flex gap-x-2 rounded-lg py-[5px] px-[14px] items-center'>
-        <img src={person1} alt='Profile' className='h-9 w-9 rounded-full' />
+        <img
+          src={person1}
+          alt='Profile'
+          className='h-9 w-9 rounded-full object-cover'
+        />
         <p>Ayush Baral</p>
       </div>
 
@@ -29,7 +33,7 @@ const DetailAndContact = () => {
                 <img
                   src={contact?.image}
                   alt='Profile'
-                  className='h-9 w-9 rounded-full'
+                  className='h-9 w-9 rounded-full object-cover'
                 />
                 <p>{contact?.name}</p>
               </div>

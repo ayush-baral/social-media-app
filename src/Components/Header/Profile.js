@@ -7,7 +7,7 @@ const Profile = () => {
       <img
         src={person1}
         alt='profile'
-        className='h-[44px] w-[44px] rounded-full cursor-pointer'
+        className='h-[44px] w-[44px] rounded-full cursor-pointer object-cover'
       />
     </div>
   );
