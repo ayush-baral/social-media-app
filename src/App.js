@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import SignIn from './Pages/SignIn';
 import NotAuthenticatedPaths from './Components/HOC/NotAuthenticatedPaths';
 import AuthenticatedPaths from './Components/HOC/AuthenticatedPaths';
+import Profile from './Pages/Profile';
 
 function App() {
   return (
@@ -21,6 +22,14 @@ function App() {
               </AuthenticatedPaths>
             }
             path='/'
+          />
+          <Route
+            element={
+              <AuthenticatedPaths>
+                <Profile />
+              </AuthenticatedPaths>
+            }
+            path='/profile'
           />
           <Route
             element={
