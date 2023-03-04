@@ -5,6 +5,8 @@ import SignUp from './Pages/SignUp';
 import Home from './Pages/Home';
 import { Toaster } from 'react-hot-toast';
 import SignIn from './Pages/SignIn';
+import NotAuthenticatedPaths from './Components/HOC/NotAuthenticatedPaths';
+import AuthenticatedPaths from './Components/HOC/AuthenticatedPaths';
 
 function App() {
   return (
@@ -12,9 +14,30 @@ function App() {
       <Toaster position='bottom-right' />
       <BrowserRouter>
         <Routes>
-          <Route element={<Home />} path='/' />
-          <Route element={<SignUp />} path='/signup' />
-          <Route element={<SignIn />} path='/signin' />
+          <Route
+            element={
+              <AuthenticatedPaths>
+                <Home />
+              </AuthenticatedPaths>
+            }
+            path='/'
+          />
+          <Route
+            element={
+              <NotAuthenticatedPaths>
+                <SignUp />
+              </NotAuthenticatedPaths>
+            }
+            path='/signup'
+          />
+          <Route
+            element={
+              <NotAuthenticatedPaths>
+                <SignIn />
+              </NotAuthenticatedPaths>
+            }
+            path='/signin'
+          />
         </Routes>
       </BrowserRouter>
     </>

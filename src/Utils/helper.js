@@ -3,7 +3,7 @@ export const saveState = (key, data) => {
 };
 
 export const loadState = (key) => {
-  localStorage?.getItem(key);
+  return localStorage?.getItem(key);
 };
 
 export const removeState = (key) => {
