@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import Input from '../Components/UI/Input';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
+import { accessToken } from '../Utils/names';
+import { saveState } from '../Utils/helper';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -23,12 +25,12 @@ const SignUp = () => {
       .then((userCredential) => {
         toast.success('Signup successful', { duration: 3000 });
         const user = userCredential.user;
+        saveState(accessToken, user?.accessToken);
         reset();
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
         toast.error(`Signup failed !! ${errorMessage}`, { duration: 3000 });
       })
       .finally(() => {
