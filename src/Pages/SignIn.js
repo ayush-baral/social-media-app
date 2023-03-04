@@ -27,6 +27,10 @@ const SignIn = () => {
         const user = userCredential.user;
         saveState(accessToken, user?.accessToken);
         reset();
+
+        setTimeout(() => {
+          navigate('/');
+        }, [1000]);
       })
       .catch((error) => {
         const errorCode = error.code;
