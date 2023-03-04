@@ -13,10 +13,12 @@ const Navbar = () => {
   return (
     <div className='flex gap-x-[76px] pt-[26px]'>
       {NAVBAR_LINKS?.map((link) => {
+        console.log('location', location);
+        console.log('link', link);
         return (
           <p
             className={`cursor-pointer border-b-[6px] border-[#F1F1F1] pb-[14px] ${
-              location?.pathname === link?.link ? 'border-[#2D68FE]' : ''
+              location?.pathname === link?.link ? '!border-[#2D68FE]' : ''
             }`}
             onClick={() => navigate(link?.link)}
           >
