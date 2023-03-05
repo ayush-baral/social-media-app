@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useForm } from 'react-hook-form';
 import Input from '../Components/UI/Input';
@@ -23,14 +23,19 @@ const SignUp = () => {
     setLoading(true);
     await createUserWithEmailAndPassword(auth, data?.email, data?.password)
       .then((userCredential) => {
-        toast.success('Signup successful', { duration: 3000 });
-        const user = userCredential.user;
+        updateProfile(userCredential?.user, {
+          displayName: data?.username,
+        });
+
+        const user = userCredential?.user;
         saveState(accessToken, user?.accessToken);
         reset();
+        toast.success('Signup successful', { duration: 1000 });
         setTimeout(() => {
           navigate('/');
         }, [1000]);
       })
+
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
@@ -51,6 +56,14 @@ const SignUp = () => {
           className='flex flex-col gap-y-4'
         >
           <Input
+            label={'UserName'}
+            name='username'
+            register={register}
+            errors={errors}
+            rules={{ required: 'This Field is required' }}
+          />
+
+          <Input
             label={'Email'}
             name='email'
             register={register}
@@ -62,6 +75,7 @@ const SignUp = () => {
               },
             }}
           />
+
           <Input
             label={'Password'}
             name='password'
