@@ -2,15 +2,17 @@ import { onAuthStateChanged } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
 import person1 from '../../assets/person1.jpg';
 import person2 from '../../assets/person2.jpg';
+import person3 from '../../assets/person3.jpg';
 import { auth } from '../../firebase';
 
 const CONTACT_DATA = [
   { name: 'Avishek', image: person1 },
   { name: 'Siris', image: person2 },
-  { name: 'Prasanna', image: person1 },
-  { name: 'Sarin', image: person2 },
-  { name: 'Sujan', image: person1 },
-  { name: 'Pradip', image: person2 },
+  // { name: 'Prasanna', image: person1 },
+  // { name: 'Sarin', image: person2 },
+  // { name: 'Sujan', image: person1 },
+  // { name: 'Pradip', image: person2 },
+  { name: 'Stella', image: person3 },
 ];
 
 const DetailAndContact = () => {

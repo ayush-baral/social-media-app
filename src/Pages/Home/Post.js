@@ -113,15 +113,15 @@ const Post = ({ post }) => {
       <span className='px-5'>{post?.caption}</span>
 
       {/* Post Image */}
-      {/* {post?.image && ( */}
-      <div className='py-5'>
-        <img
-          className='w-full object-cover'
-          src={post.image || person1}
-          alt={post.caption}
-        />
-      </div>
-      {/* )} */}
+      {post?.image && (
+        <div className='py-5'>
+          <img
+            className='w-full object-cover'
+            src={post.image}
+            alt={post.caption}
+          />
+        </div>
+      )}
 
       {/* Post Likes */}
       {likes?.length > 0 && (
@@ -144,8 +144,8 @@ const Post = ({ post }) => {
             <AiOutlineHeart className='btn-icon' onClick={likePostHandler} />
           )}
           <BsChatDots className='btn-icon' />
+          <BsBookmarks className='btn-icon' />
         </div>
-        <BsBookmarks className='btn-icon' />
       </div>
 
       {comments?.length > 0 && (
@@ -172,7 +172,7 @@ const Post = ({ post }) => {
       )}
 
       {/* post input box */}
-      <form className='flex items-center p-4'>
+      <form className='flex items-center p-4 gap-x-2'>
         <BiHappyAlt className='text-2xl' />
         <input
           type='text'
