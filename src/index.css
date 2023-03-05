@@ -7,3 +7,23 @@
     @apply text-2xl cursor-pointer hover:scale-125 transition-transform duration-200 ease-out;
   }
 }
+
+.comment-section ::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+.comment-section ::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.comment-section ::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 12px;
+}
+
+/* Handle on hover */
+.comment-section ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

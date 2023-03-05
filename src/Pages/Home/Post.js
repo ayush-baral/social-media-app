@@ -84,20 +84,14 @@ const Post = ({ post }) => {
     e.preventDefault();
 
     const commentToSend = comment;
+    setComment('');
 
-    await addDoc(collection(db, 'posts', post?.id, 'comments'), {
+    await addDoc(collection(db, 'posts', post.id, 'comments'), {
       comment: commentToSend,
-      userName: user?.userName,
+      userName: user?.displayName,
       userImage: user?.photoURL,
       timestamp: serverTimestamp(),
-    })
-      ?.then((res) => {
-        setComment('');
-        console.log('response', res);
-      })
-      .catch((e) => {
-        console.log('catch', e);
-      });
+    });
   };
 
   return (
@@ -155,21 +149,25 @@ const Post = ({ post }) => {
       </div>
 
       {comments?.length > 0 && (
-        <div className='mx-10 max-h-24 overflow-y-auto scrollbar-none'>
-          {comments.map((comment, i) => {
-            return (
-              <div className='flex items-center space-x-2 mb-2' key={i}>
-                <img
-                  alt='userImage'
-                  src={comment?.userImage}
-                  className='h-7 w-7 rounded-full object-cover'
-                />
-                <p className='font-semibold'>{comment?.userName}</p>
-                <p className='flex-1 truncate'>{comment?.comment}</p>
-                <Moment fromNow>{comment?.timestamp?.toDate()}</Moment>
-              </div>
-            );
-          })}
+        <div className='comment-section'>
+          <div className='m-5 max-h-28 overflow-y-auto scrollbar-none '>
+            {comments.map((comment, i) => {
+              return (
+                <div className='flex items-center space-x-2 mb-2' key={i}>
+                  <img
+                    alt='userImage'
+                    src={comment?.userImage || person1}
+                    className='h-7 w-7 rounded-full object-cover'
+                  />
+                  <p className='font-semibold'>{comment?.data()?.userName}</p>
+                  <p className='flex-1 truncate'>{comment?.data()?.comment}</p>
+                  <Moment fromNow>
+                    {comment?.data()?.timestamp?.toDate()}
+                  </Moment>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
