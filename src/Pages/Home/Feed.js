@@ -13,20 +13,6 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../firebase';
 import Post from './Post';
 
-// const Posts = [
-//   {
-//     userName: 'Ayush',
-//     userImage: person1,
-//     name: 'Ayush',
-//     date: 'March 1, 10:09 PM',
-//     caption: 'Some clicks of todays tour of Nepal',
-//     image: person1,
-//     isLiked: false,
-//     comments: [{ userName: 'Avishek', userImage: person2, comment: 'Nice' }],
-//     // likes:[{}]
-//   },
-// ];
-
 const Feed = () => {
   const [showModal, setShowModal] = useState(false);
 
@@ -42,6 +28,10 @@ const Feed = () => {
     return unsubcribe;
   }, []);
 
+  const showPostModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <>
       <div className='col-span-6'>
@@ -53,12 +43,13 @@ const Feed = () => {
             alt='Profile'
             className='h-10 w-10 rounded-full object-cover'
           />
-          <textarea
-            rows={1}
-            className='focus:outline-none bg-[#F1F1F1] rounded-[27px] p-4 w-full resize-none cursor-pointer'
-            placeholder=' Whats on your mind Ayush?'
-            onClick={() => setShowModal(true)}
-          />
+
+          <div
+            className=' bg-[#F1F1F1] rounded-[27px] p-4 w-full resize-none cursor-pointer'
+            onClick={showPostModal}
+          >
+            <p>Whats on your mind?</p>
+          </div>
         </div>
 
         {/* posts  */}
@@ -68,7 +59,7 @@ const Feed = () => {
               id: post?.id,
               userName: post?.data()?.userName,
               userImg: post?.data()?.profileImg,
-              img: post?.data()?.image,
+              image: post?.data()?.image,
               caption: post?.data()?.caption,
             };
 

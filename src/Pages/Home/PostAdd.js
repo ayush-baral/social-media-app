@@ -1,14 +1,21 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import React, { useRef, useState } from 'react';
-import { auth, db } from '../../firebase';
+import React, { useEffect, useRef, useState } from 'react';
+import { auth, db, storage } from '../../firebase';
 import person1 from '../../assets/person1.jpg';
 import { FaLock } from 'react-icons/fa';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { AiFillCaretDown, AiOutlineFileAdd } from 'react-icons/ai';
 import { BiImageAdd } from 'react-icons/bi';
 import { useForm } from 'react-hook-form';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 
 const PostAdd = ({ onSetShowModal }) => {
   const [user, setUser] = useState(null);
@@ -36,10 +43,12 @@ const PostAdd = ({ onSetShowModal }) => {
   };
 
   // setting user if user changes
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(user);
-    }
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
   });
 
   const postSubmitHandler = async (data) => {
@@ -51,6 +60,16 @@ const PostAdd = ({ onSetShowModal }) => {
         profileImg: user?.photoURL,
         timestamp: serverTimestamp(),
       });
+
+      if (selectedImage) {
+        const imageRef = ref(storage, `posts/${docRef.id}/image`);
+        await uploadString(imageRef, selectedImage, 'data_url');
+
+        const downloadURL = await getDownloadURL(imageRef);
+        await updateDoc(doc(db, 'posts', docRef.id), {
+          image: downloadURL,
+        });
+      }
 
       reset();
       onSetShowModal(false);

@@ -1,9 +1,13 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
   onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
   setDoc,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -19,12 +23,15 @@ const Post = ({ post }) => {
   const [likes, setLikes] = useState([]);
   const [user, setUser] = useState(null);
   const [comment, setComment] = React.useState('');
+  const [comments, setComments] = React.useState([]);
 
   // setting user if user changes
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(user);
-    }
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
   });
 
   // fetch like detail
@@ -37,6 +44,20 @@ const Post = ({ post }) => {
     );
     return unsubscribe;
   }, [post?.id]);
+
+  // fetch comment detail
+  useEffect(() => {
+    const unSubscribe = onSnapshot(
+      query(
+        collection(db, 'posts', post.id, 'comments'),
+        orderBy('timestamp', 'desc')
+      ),
+      (snapshot) => {
+        setComments(snapshot.docs);
+      }
+    );
+    return unSubscribe;
+  }, [post.id]);
 
   // When user likes a post this function is called
   async function likePostHandler() {
@@ -57,6 +78,27 @@ const Post = ({ post }) => {
       ? setIsLiked(false)
       : setIsLiked(true);
   }, [likes, user?.email]);
+
+  // this function is called on commenting on a post
+  const sendComment = async (e) => {
+    e.preventDefault();
+
+    const commentToSend = comment;
+
+    await addDoc(collection(db, 'posts', post?.id, 'comments'), {
+      comment: commentToSend,
+      userName: user?.userName,
+      userImage: user?.photoURL,
+      timestamp: serverTimestamp(),
+    })
+      ?.then((res) => {
+        setComment('');
+        console.log('response', res);
+      })
+      .catch((e) => {
+        console.log('catch', e);
+      });
+  };
 
   return (
     <div className='bg-white my-7 border rounded-md'>
@@ -112,9 +154,9 @@ const Post = ({ post }) => {
         <BsBookmarks className='btn-icon' />
       </div>
 
-      {post?.comments?.length > 0 && (
+      {comments?.length > 0 && (
         <div className='mx-10 max-h-24 overflow-y-auto scrollbar-none'>
-          {post?.comments.map((comment, i) => {
+          {comments.map((comment, i) => {
             return (
               <div className='flex items-center space-x-2 mb-2' key={i}>
                 <img
@@ -130,6 +172,7 @@ const Post = ({ post }) => {
           })}
         </div>
       )}
+
       {/* post input box */}
       <form className='flex items-center p-4'>
         <BiHappyAlt className='text-2xl' />
@@ -144,7 +187,7 @@ const Post = ({ post }) => {
           type='submit'
           className='text-blue-400 font-bold disabled:text-blue-200'
           disabled={!comment.trim()}
-          // onClick={sendComment}
+          onClick={sendComment}
         >
           Comment
         </button>

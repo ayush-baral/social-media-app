@@ -17,10 +17,13 @@ const DetailAndContact = () => {
   const [user, setUser] = useState(null);
 
   // setting user if user changes
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setUser(user);
-    }
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
   });
 
   return (
