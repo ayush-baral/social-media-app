@@ -31,7 +31,6 @@ const Feed = () => {
   const [showModal, setShowModal] = useState(false);
 
   const [posts, setPosts] = React.useState([]);
-  console.log('🚀 ~ file: Feed.js:34 ~ Feed ~ posts:', posts);
 
   useEffect(() => {
     const unsubcribe = onSnapshot(

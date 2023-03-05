@@ -1,13 +1,62 @@
-import React from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  setDoc,
+} from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { BiHappyAlt } from 'react-icons/bi';
 import { BsBookmarks, BsChatDots, BsThreeDots } from 'react-icons/bs';
 import Moment from 'react-moment';
 import person1 from '../../assets/person1.jpg';
+import { auth, db } from '../../firebase';
 
 const Post = ({ post }) => {
-  console.log('🚀 ~ file: Post.js:8 ~ Post ~ post:', post);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState([]);
+  const [user, setUser] = useState(null);
   const [comment, setComment] = React.useState('');
+
+  // setting user if user changes
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUser(user);
+    }
+  });
+
+  // fetch like detail
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(db, 'posts', post.id, 'likes'),
+      (snapshot) => {
+        setLikes(snapshot?.docs);
+      }
+    );
+    return unsubscribe;
+  }, [post?.id]);
+
+  // When user likes a post this function is called
+  async function likePostHandler() {
+    if (isLiked) {
+      // runs if user has already liked the post
+      await deleteDoc(doc(db, 'posts', post.id, 'likes', user?.email));
+    } else {
+      // runs if user hasn't liked the post
+      await setDoc(doc(db, 'posts', post.id, 'likes', user?.email), {
+        username: user?.email,
+      });
+    }
+  }
+
+  // checking if user has liked the post
+  useEffect(() => {
+    likes.findIndex((like) => like.id === user?.email) === -1
+      ? setIsLiked(false)
+      : setIsLiked(true);
+  }, [likes, user?.email]);
 
   return (
     <div className='bg-white my-7 border rounded-md'>
@@ -38,35 +87,30 @@ const Post = ({ post }) => {
       </div>
       {/* )} */}
 
-      {/* Post Comments */}
-      {post?.likes?.length > 0 && (
-        <div className='p-5 truncate'>
+      {/* Post Likes */}
+      {likes?.length > 0 && (
+        <div className='px-5 py-1 truncate'>
           <p className='font-bold mb-1'>
-            {post?.likes?.length} {post?.likes?.length === 1 ? 'like' : 'likes'}
+            {likes?.length} {likes?.length === 1 ? 'like' : 'likes'}
           </p>
         </div>
       )}
 
       {/* Post Buttons */}
-      {/* {session?.user && ( */}
       <div className='flex justify-between items-center px-4 pt-4'>
         <div className='flex space-x-4'>
-          {post?.isLiked ? (
+          {isLiked ? (
             <AiFillHeart
               className='btn-icon text-red-400'
-              // onClick={likePost}
+              onClick={likePostHandler}
             />
           ) : (
-            <AiOutlineHeart
-              className='btn-icon'
-              // onClick={likePost}
-            />
+            <AiOutlineHeart className='btn-icon' onClick={likePostHandler} />
           )}
           <BsChatDots className='btn-icon' />
         </div>
         <BsBookmarks className='btn-icon' />
       </div>
-      {/* )} */}
 
       {post?.comments?.length > 0 && (
         <div className='mx-10 max-h-24 overflow-y-auto scrollbar-none'>
@@ -87,7 +131,6 @@ const Post = ({ post }) => {
         </div>
       )}
       {/* post input box */}
-      {/* {session?.user && ( */}
       <form className='flex items-center p-4'>
         <BiHappyAlt className='text-2xl' />
         <input
@@ -106,7 +149,6 @@ const Post = ({ post }) => {
           Comment
         </button>
       </form>
-      {/* )} */}
     </div>
   );
 };

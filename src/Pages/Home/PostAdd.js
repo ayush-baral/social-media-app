@@ -31,7 +31,6 @@ const PostAdd = ({ onSetShowModal }) => {
       reader.readAsDataURL(e.target.files[0]);
     }
     reader.onload = (readerEvent) => {
-      console.log('readerEvent', readerEvent);
       setSelectedImage(readerEvent.target?.result);
     };
   };
@@ -44,8 +43,6 @@ const PostAdd = ({ onSetShowModal }) => {
   });
 
   const postSubmitHandler = async (data) => {
-    console.log('data', data);
-
     setLoading(true);
     try {
       const docRef = await addDoc(collection(db, 'posts'), {
@@ -60,7 +57,6 @@ const PostAdd = ({ onSetShowModal }) => {
       toast.success('Post Added Successfully');
     } catch (e) {
       toast.error('error posting');
-      console.log('e', e);
     } finally {
       setLoading(false);
     }
