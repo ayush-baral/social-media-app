@@ -110,7 +110,7 @@ const Post = ({ post }) => {
         <BsThreeDots className='h-5 cursor-pointer' />
       </div>
 
-      <span className='px-5'>{post?.caption}</span>
+      {post?.caption && <span className='px-5'>{post?.caption}</span>}
 
       {/* Post Image */}
       {post?.image && (
