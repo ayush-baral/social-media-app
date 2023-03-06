@@ -2,9 +2,13 @@ import { onMessage } from 'firebase/messaging';
 import { toast } from 'react-hot-toast';
 
 // eslint-disable-next-line no-undef
-importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js');
+importScripts(
+  'https://www.gstatic.com/firebasejs/<v9+>/firebase-app-compat.js'
+);
 // eslint-disable-next-line no-undef
-importScripts('https://www.gstatic.com/firebasejs/9.6.8/firebase-messaging.js');
+importScripts(
+  'https://www.gstatic.com/firebasejs/<v9+>/firebase-messaging-compat.js'
+);
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBPLiYXe7RnhZFNym0bha6dNe3NICugKO8',
