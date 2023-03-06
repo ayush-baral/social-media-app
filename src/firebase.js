@@ -4,12 +4,8 @@ import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: 'AIzaSyBPLiYXe7RnhZFNym0bha6dNe3NICugKO8',
   authDomain: 'social-media-app-6edaf.firebaseapp.com',
@@ -24,9 +20,47 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const messaging = getMessaging(app);
 
 export const auth = getAuth(app);
 
-const analytics = getAnalytics(app);
+export const requestForToken = async (setTokenFound) => {
+  return getToken(messaging, {
+    vapidKey:
+      'BN-5C-ETQ_4XgEVKvHPks6HGy3cRRbE4mLsO4rZKzh-4V6vczUeVlQ87ap0dCcLpzQP4ynwV6jar6oLlJW3UazM',
+  })
+    .then((currentToken) => {
+      if (currentToken) {
+        console.log('current token for client: ', currentToken);
+        setTokenFound(true);
+      } else {
+        console.log(
+          'No registration token available. Request permission to generate one.'
+        );
+        setTokenFound(false);
+      }
+    })
+    .catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+    });
+};
+
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      console.log('payload', payload);
+      resolve(payload);
+    });
+  });
+
+// messaging.onBackgroundMessage((payload) => {
+//   console.log('Received background message: ', payload);
+
+//   const notificationTitle = payload.notification.title;
+//   const notificationOptions = { body: payload.notification.body };
+
+//   // eslint-disable-next-line no-restricted-globals
+//   self.registration.showNotification(notificationTitle, notificationOptions);
+// });
 
 export default app;
