@@ -4,7 +4,8 @@ import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getToken, onMessage, getMessaging } from 'firebase/messaging';
+import { onBackgroundMessage } from 'firebase/messaging/sw';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBPLiYXe7RnhZFNym0bha6dNe3NICugKO8',
@@ -48,19 +49,12 @@ export const requestForToken = async (setTokenFound) => {
 export const onMessageListener = () =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
-      console.log('payload', payload);
+      console.log(
+        '🚀 ~ file: firebase.js:53 ~ messaging.onMessage ~ payload:',
+        payload
+      );
       resolve(payload);
     });
   });
-
-// messaging.onBackgroundMessage((payload) => {
-//   console.log('Received background message: ', payload);
-
-//   const notificationTitle = payload.notification.title;
-//   const notificationOptions = { body: payload.notification.body };
-
-//   // eslint-disable-next-line no-restricted-globals
-//   self.registration.showNotification(notificationTitle, notificationOptions);
-// });
 
 export default app;

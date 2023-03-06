@@ -43,9 +43,9 @@ const DetailAndContact = () => {
         <h4 className='mb-6'>Online Contacts</h4>
 
         <div className='flex flex-col gap-y-3'>
-          {CONTACT_DATA?.map((contact) => {
+          {CONTACT_DATA?.map((contact, i) => {
             return (
-              <div className='flex items-center gap-x-4'>
+              <div className='flex items-center gap-x-4' key={i}>
                 <img
                   src={contact?.image}
                   alt='Profile'

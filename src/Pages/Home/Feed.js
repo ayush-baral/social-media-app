@@ -63,7 +63,7 @@ const Feed = () => {
               caption: post?.data()?.caption,
             };
 
-            return <Post post={postData} />;
+            return <Post post={postData} key={post?.id} />;
           })}
         </>
       </div>

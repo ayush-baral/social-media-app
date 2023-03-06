@@ -14,42 +14,40 @@ import { onMessageListener, requestForToken } from './firebase';
 function App() {
   const [isTokenFound, setTokenFound] = useState(false);
   const [notification, setNotification] = useState({ title: '', body: '' });
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
     requestForToken(setTokenFound);
   }, []);
 
-  const notify = () => toast(<ToastDisplay />);
+  onMessageListener().then((payload) => {
+    setNotification({
+      title: payload.notification.title,
+      body: payload.notification.body,
+    });
+    console.log(payload);
+  });
 
-  function ToastDisplay() {
+  useEffect(() => {
+    if (notification?.title) {
+      setShowNotification(true);
+    }
+  }, [notification?.title]);
+
+  useEffect(() => {
+    if (!showNotification) return;
+    toast.success(<Display />);
+    setShowNotification(false);
+  }, [showNotification]);
+
+  function Display() {
     return (
       <div>
-        <p>
-          <b>{notification?.title}</b>
-        </p>
+        <h4>{notification?.title}</h4>
         <p>{notification?.body}</p>
       </div>
     );
   }
-
-  useEffect(() => {
-    if (notification?.title) {
-      notify();
-
-      // setTimeout(()=>{
-
-      // },3000)
-    }
-  }, [notification]);
-
-  onMessageListener()
-    .then((payload) => {
-      setNotification({
-        title: payload?.notification?.title,
-        body: payload?.notification?.body,
-      });
-    })
-    .catch((err) => console.log('failed: ', err));
 
   return (
     <>
