@@ -85,7 +85,7 @@ const PostAdd = ({ onSetShowModal }) => {
     <div className='fixed top-0 left-0 h-screen w-full flex justify-center items-center'>
       <div className=' bg-black opacity-40 absolute top-0 left-0 h-full w-full ' />
       {/* <div className='absolute top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full'> */}
-      <div className='relative w-full h-full max-w-2xl md:h-auto max-h-[664px] bg-white z-[2] rounded-lg overflow-hidden'>
+      <div className='relative h-full max-w-2xl w-[90%] md:h-auto max-h-[664px] bg-white z-[2] rounded-lg overflow-hidden'>
         <div className='relative bg-white  shadow '>
           <form onSubmit={handleSubmit(postSubmitHandler)}>
             <div className='flex items-start justify-between p-4 border-b rounded-t '>
