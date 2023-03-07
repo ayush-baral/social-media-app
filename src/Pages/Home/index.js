@@ -8,7 +8,7 @@ const Index = () => {
     <div className='bg-[#f1f1f1] min-h-screen'>
       <Header />
 
-      <div className='mt-7 gap-x-[50px] grid grid-cols-12 ml-6 mr-[60]'>
+      <div className='mt-7 gap-x-[50px] gap-y-5 grid grid-cols-12 ml-6 mr-[60px]'>
         <DetailAndContact />
         <Feed />
       </div>

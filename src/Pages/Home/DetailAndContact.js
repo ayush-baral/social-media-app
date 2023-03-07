@@ -29,7 +29,7 @@ const DetailAndContact = () => {
   });
 
   return (
-    <div className='col-span-3 flex flex-col gap-y-8'>
+    <div className='col-span-12 lg:col-span-3 flex flex-col gap-y-8'>
       <div className='bg-white flex gap-x-2 rounded-lg py-[5px] px-[14px] items-center'>
         <img
           src={user?.photoURL || person1}

@@ -34,7 +34,7 @@ const Feed = () => {
 
   return (
     <>
-      <div className='col-span-6'>
+      <div className='col-span-12 lg:col-span-6'>
         {showModal && <PostAdd onSetShowModal={setShowModal} />}
         {/* Whats on your mind section */}
         <div className='bg-white rounded-[20px] px-6 pt-4 pb-20 flex gap-x-2  max-h-[176px] '>
